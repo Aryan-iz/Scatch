@@ -16,10 +16,18 @@ router.get("/", function (req,res){
 router.get("/shop", isLoggedIn , async(req, res) => {
     const sortOrder = req.query.sortby === "asc" ? 1 : -1;
 
-    let products = await productModel.find().sort({ createdAt: sortOrder });
+
+   const filter = {};
+
+    if (req.query.discount) {
+        filter.discount = { $gt: 0 }; // filter only discounted products
+    }
+    
+    console.log({filter})
+    let products = await productModel.find(filter).sort({ createdAt: sortOrder });
 
     let success = req.flash("success");
-    
+
     res.render("shop", { products, success, sortOrder });
 });
 
