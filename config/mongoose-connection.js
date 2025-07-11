@@ -1,12 +1,17 @@
 const mongoose = require("mongoose")
+const dbgr = require("debug")("development:mongoose")
+const config = require("config")
+//benefit of using coofig is that i automaticaly detect the environment (development or production) and use it
+// it is much more modular way than .env 
+
 
 mongoose
-        .connect("mongodb://127.0.0.1:27017/scatch")
+        .connect(`${config.get("MONGO_URI")}/scatch`)
         .then( ()=>{
-            console.log("Connected to MongoDB")
+            dbgr("Connected to MongoDB")
         })
         .catch((error)=>{
-            console.log("Error : ",error)
+            dbgr("Error : ",error)
         } )
 
 

@@ -1,0 +1,62 @@
+<%- include('./partials/header') %>
+
+<main class=" max-h-screen min-h-screen flex items-center justify-center p-16 bg-gray-100 text-gray-800">
+  <div class=" bag-container bg-white  p-10  rounded-xl shadow-[10px_10px_30px_#d1d1d1,-10px_-10px_30px_#ffffff] w-[675px] min-h-[550px] p-10 ">
+    <h2 class="text-2xl font-bold mb-8">SHOPPING CART</h2>
+
+    <% if (user && user.cart && user.cart.length > 0) { %>
+      <div class="space-y-8 max-h-[300px] overflow-y-auto pr-2">
+        <% user.cart.forEach((product) => { %>
+          <div class="flex items-center justify-between p-4 bg-[<%= product.bgcolor %>] rounded-lg">
+            <div class="flex items-center">
+              <div class="w-24 h-24 rounded-md overflow-hidden mr-6 bg-[<%= product.panelcolor %>] flex items-center justify-center">
+                <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>" class="w-full h-full object-contain">
+              </div>
+              <div>
+                <p class="font-semibold text-lg"><%= product.name %></p>
+                <p class="text-sm text-gray-500">Discount: Rs.<%= Number(product.discount) %></p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-medium">Rs. <%= Number(product.price) %>.00</p>
+              <a href="/removefromcart/<%= product._id%>" class="text-gray-400 text-2xl hover:text-red-500">&times;</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-center text-gray-500 mt-10">Your cart is empty.</p>
+    <% } %>
+
+    <!-- Divider -->
+    <hr class="my-8 border-t border-gray-300">
+
+    <!-- Total & Checkout -->
+     <div class="flex items-center justify-between mb-1 text-gray-600">
+      <span class="text-lg font-semibold">Total Discount</span>
+      <span class="text-xl font-bold">
+        Rs. 
+        <%= user.cart.reduce((sum, item) => sum + Number(item.discount), 0) %>.00
+      </span>
+    </div>
+    <div class="flex items-center justify-between mb-1 text-gray-600">
+      <span class="text-lg font-semibold">Shipping Fee</span>
+      <span class="text-xl font-bold">Free</span>
+    </div>
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-xl font-semibold">Net Total</span>
+      <span class="text-2xl font-bold">
+        Rs. 
+        <%= user.cart.reduce((sum, item) => sum + Number(item.price)-Number(item.discount), 0) %>.00
+      </span>
+
+    </div>
+     
+
+    <button class="w-full bg-[#4285F4] text-white py-4 rounded-full text-lg font-semibold hover:bg-blue-600 transition">
+      CHECKOUT
+    </button>
+  </div>
+</main>
+
+<%- include('./partials/footer') %>
