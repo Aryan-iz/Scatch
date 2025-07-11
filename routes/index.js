@@ -13,12 +13,16 @@ router.get("/", function (req,res){
 })
 
 
-router.get("/shop", isLoggedIn , async(req,res)=>{
+router.get("/shop", isLoggedIn , async(req, res) => {
+    const sortOrder = req.query.sortby === "asc" ? 1 : -1;
 
-    let products = await productModel.find()
-    let success= req.flash("success")
-    res.render("shop",{products,success})
-})
+    let products = await productModel.find().sort({ createdAt: sortOrder });
+
+    let success = req.flash("success");
+    
+    res.render("shop", { products, success, sortOrder });
+});
+
 
 router.get("/cart",isLoggedIn, async (req,res)=>{
 
@@ -59,15 +63,15 @@ router.get("/removefromcart/:id",isLoggedIn, async(req,res)=>{
 
 //sortby also adding myself
 
-router.get("/shop",isLoggedIn,async(req,res)=>{
+// router.post("/shop",isLoggedIn,async(req,res)=>{
 
-    const sortOrder = req.query.sortby === "asc" ? 1 : -1;
+//     const sortOrder = req.query.sortby === "asc" ? 1 : -1;
 
-    let products=await productModel.find().sort({createdAt: sortOrder }).populate("cart");
+//     let products=await productModel.find().sort({createdAt: sortOrder }).populate("cart");
 
-    res.render("shop",{products})
+//     res.render("shop",{products,sortOrder})
 
-})
+// })
 
 
 module.exports = router;

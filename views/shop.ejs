@@ -11,12 +11,15 @@
         <div class="w-[25%] flex h-screen flex-col items-start">
             <div class="flex items-center gap-2">
                 <h3>sort by</h3>
-             <form action="/shop" method="get">
-                <select class="border-[1px] px-2 py-1" name="sortby">
-                    <option value="desc">New to Old</option>
-                    <option value="asc">Old to New</option>
-                </select>
-             </form>
+                
+        <form action="/shop" method="get">
+          <select class="border-[1px] px-2 py-1" name="sortby" onchange="this.form.submit()">
+            <option value="desc" <% if(sortOrder == -1) { %> selected <% } %>>New to Old</option>
+            <option value="asc" <% if(sortOrder == 1) { %> selected <% } %>>Old to New</option>
+          </select>
+        </form>
+
+
 
             </div>
             <div class="flex flex-col mt-20">
