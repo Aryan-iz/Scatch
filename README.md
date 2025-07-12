@@ -26,8 +26,6 @@ Scatch is a modern, full-stack e-commerce application designed to provide a seam
 Features
 User Authentication: Secure user registration, login, and logout functionalities.
 
-Dynamic header styling based on user login status (dark for logged-in, light for logged-out).
-
 Product Catalog (Shop Page): Browse a variety of products with options for sorting and filtering (e.g., by discount, new collection).
 
 Shopping Cart: Add and remove products from the cart.
@@ -42,15 +40,13 @@ See the number of items in the cart.
 
 View a list of past orders with their status and details.
 
-Editable Profile: Update full name, email, and profile picture directly on the account page (with AJAX-like submission for a smooth experience).
+Editable Profile: Update full name, email, and profile picture directly on the account page.
 
-Responsive Design: Optimized for various screen sizes (mobile, tablet, desktop) using Tailwind CSS.
+Responsive Design: It is not compelety Responsive but will work on that later😊. 
 
 Flash Messages: User-friendly success and error notifications.
 
 Technologies Used
-Based on your package-lock.json and typical project structure, here are the technologies used:
-
 Backend:
 
 Node.js: JavaScript runtime environment.
@@ -66,8 +62,6 @@ Multer: Middleware for handling multipart/form-data, primarily for file uploads 
 Bcrypt: Library for hashing passwords (^6.0.0).
 
 JSON Web Token (jsonwebtoken): For implementing token-based authentication (^9.0.2).
-
-Joi: Object schema description language and validator for JavaScript (^17.13.3).
 
 Dotenv: Loads environment variables from a .env file (^17.2.0).
 
@@ -135,7 +129,7 @@ mkdir -p public/uploads
 
 Run the application:
 
-npm start
+nodemon app.js
 
 The application should now be running on http://localhost:3000 (or your configured port).
 
