@@ -2,6 +2,7 @@ const express = require("express");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const productModel = require("../models/product-model");
 const userModel = require("../models/user-model");
+const upload = require("../config/multer-config");
 const router= express.Router();
 
 
@@ -16,19 +17,30 @@ router.get("/", function (req,res){
 router.get("/shop", isLoggedIn , async(req, res) => {
     const sortOrder = req.query.sortby === "asc" ? 1 : -1;
 
+    const showDiscountOnly = req.query.discount === "true";
+    const showNewCollection = req.query.newcollection === "true";
+
 
    const filter = {};
-
-    if (req.query.discount) {
+    if (showDiscountOnly) {
         filter.discount = { $gt: 0 }; // filter only discounted products
     }
+
+
+    let products ;
     
-    console.log({filter})
-    let products = await productModel.find(filter).sort({ createdAt: sortOrder });
+    //checking for newcollectoin to be true
+    if(showNewCollection){
+       products = await productModel.find(filter).sort({ createdAt: sortOrder }).limit(4);
+    }else{
+        products = await productModel.find(filter).sort({ createdAt: sortOrder })
+    }
+
+    
 
     let success = req.flash("success");
 
-    res.render("shop", { products, success, sortOrder });
+    res.render("shop", { products, success, sortOrder, query:req.query });
 });
 
 
@@ -69,17 +81,30 @@ router.get("/removefromcart/:id",isLoggedIn, async(req,res)=>{
 })
 
 
-//sortby also adding myself
+router.get("/myaccount",isLoggedIn,async(req,res)=>{
+    
+    let user = await userModel.findOne({email:req.user.email}).populate("cart")
+    console.log({user})
 
-// router.post("/shop",isLoggedIn,async(req,res)=>{
+    res.render("myaccount",{user})
 
-//     const sortOrder = req.query.sortby === "asc" ? 1 : -1;
+})
 
-//     let products=await productModel.find().sort({createdAt: sortOrder }).populate("cart");
 
-//     res.render("shop",{products,sortOrder})
+//updating the user info
 
-// })
+router.post("/update-profile", upload.single("profileImage"), isLoggedIn, async (req, res) => {
+    
+
+        let {fullname,email}=req.body;
+        // let profileImage= req.file.buffer;
+
+        
+
+        let user= await userModel.findOneAndUpdate({email : req.user.email},{fullname,email,picture:req.file.buffer})
+        user.save();
+        res.redirect("/myaccount")
+}) 
 
 
 module.exports = router;

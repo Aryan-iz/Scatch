@@ -18,7 +18,7 @@ const userSchema= mongoose.Schema({
         default : [] 
     },
     contact : Number,
-    picture : String   
+    picture : Buffer   
 
 })
 
